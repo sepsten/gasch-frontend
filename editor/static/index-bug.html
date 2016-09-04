@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ContentEditable tests</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css" type="text/css">
+  </head>
+  <body>
+    <h1>ContentEditable tests</h1>
+    <p id="strong">The CSS white-space <strong>property</strong> is set to pre-wrap. Also, it is invalid to just declare the contenteditable property: it must be set to true.</p>
+    <input type="text" name="test"/>
+    <h2>Paragraphs</h2>
+    <div contenteditable=true>
+      <p>First paragraph.</p>
+      <p>Lorem ipsum dolor si amet…</p>
+    </div>
+
+    <h2>Editable preformatted tag</h2>
+    <pre contenteditable=true>
+      Edit me...
+    </pre>
+
+    <h2>Non-editable node</h2>
+    <div contenteditable=true>
+      <p>First paragraph.</p>
+      <p class="block" contenteditable=false>
+        I'm a block. My content cannot be modified, but I can be removed altogether.
+        <input type="text" value="Coucou c'est anat"/>
+      </p>
+      <p>Lorem ipsum dolor si amet…</p>
+    </div>
+
+    <h2>Multiple editable nodes</h2>
+    <div>
+      <p contenteditable=true>First paragraph.</p>
+      <p contenteditable=true>Lorem ipsum dolor si amet…</p>
+    </div>
+
+    <h2>Selection events</h2>
+    <button>Test</button>
+    <a href="#">Test link</a>
+    <div id="select" contenteditable=true>
+      <p>Test</p>
+      <p>Lorem ipsum dolor sit amet sucez tous des bites !</p>
+    </div>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="/script.js"></script>
+  </body>
+</html>
