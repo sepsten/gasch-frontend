@@ -1,4 +1,4 @@
-var Component = require("./../../common/component");
+var Component = require("./../../common/js/component");
 
 /**
  * A component that creates a surface (unrelated to Piotr surfaces) where an

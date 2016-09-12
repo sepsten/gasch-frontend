@@ -36,4 +36,12 @@ components.map(function(component) {
     component+"-sass"]);
 });
 
+gulp.task("watch", function() {
+  components.map(function(component) {
+    gulp.watch("./"+component+"/static/*", [component+"-static"]);
+    gulp.watch("./"+component+"/js/*", [component+"-scripts"]);
+    gulp.watch("./"+component+"/scss/*", [component+"-sass"]);
+  });
+});
+
 gulp.task("default", components);
