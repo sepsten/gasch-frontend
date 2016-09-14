@@ -18,6 +18,7 @@ body {
 .body {
   width: 60%;
   margin: auto;
+  margin-top: 70px;
 }
 
 /** CONTAINER **/
@@ -87,12 +88,19 @@ body {
 
 /** TOOLBAR **/
 .toolbar {
-  margin-top: 30px;
+  padding: 20px;
+  display: flex;
+  height: 30px;
+  width: 100%;
+
+  position: fixed;
+  top: 0;
+  
+  background-color: white;
 }
 
 .toolbar button {
-  display: inline-block;
   margin-right: 10px;
-  padding-left: 6px;
-  padding-right: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
