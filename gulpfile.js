@@ -8,7 +8,7 @@ var gulp = require("gulp"),
 // Tasks for each Gasch component
 // ------------------------------
 
-var components = ["editor"];
+var components = ["browser", "editor"];
 
 components.map(function(component) {
   gulp.task(component+"-static", function() {
