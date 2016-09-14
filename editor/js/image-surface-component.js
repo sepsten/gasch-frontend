@@ -126,6 +126,11 @@ ImageSurfaceComponent.ImageState = {
     var img = new Image;
     img.src = this.parent.state.dataURL;
     this.dom.appendChild(img);
+  },
+
+  exit() {
+    // ???
+    this.parent.state.dataURL = null;
   }
 };
 

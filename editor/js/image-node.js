@@ -2,7 +2,8 @@ var IsolatedNode = require("piotr/nodes/isolated-node"),
     ParagraphNode = require("piotr/nodes/paragraph-node"),
     Surface = require("piotr/surface"),
     ImageSurfaceComponent = require("./image-surface-component"),
-    nodeReg = require("piotr/node-registry");
+    nodeReg = require("piotr/node-registry"),
+    Document = require("piotr/document");
 
 /**
  * An isolated node that hosts an image and its description.
@@ -10,6 +11,7 @@ var IsolatedNode = require("piotr/nodes/isolated-node"),
  *
  * @class
  * @extends {Piotr.IsolatedNode}
+ * @param {GaschAPI} api - An API client instance
  */
 class ImageNode extends IsolatedNode {
   constructor() {
@@ -26,7 +28,11 @@ class ImageNode extends IsolatedNode {
 
   // From Node
   getInitialState() {
-    return {};
+    return {
+      // Image URL????
+      dataURL: null
+      // Do I need to store the state of the inner surface here?      
+    };
   }
 
   // From Node
@@ -62,7 +68,33 @@ class ImageNode extends IsolatedNode {
 
   // From Node
   render() {}
-}
+
+  // From Node
+  toJSON() {
+    var obj = super.toJSON();
+    var doc = new Document;
+    doc.nodes = this.innerSurface.nodes;
+    obj.descNodes = doc.nodesToJSON();
+    return obj;
+  }
+
+  static fromJSON(json) {
+    var node = new ImageNode;
+    node.state = Object.assign({}, json.state);
+
+    // Image surface initialization
+    if(json.state.dataURL !== null)
+      node.imageSurface.state = ImageSurfaceComponent.ImageState;
+
+    // Description surface initialization
+    if(json.descNodes) {
+      var doc = Document.fromJSON({nodes: json.descNodes});
+      node.innerSurface = new Surface(doc.nodes);
+    }
+
+    return node;
+  }
+};
 
 ImageNode.id = "image";
 nodeReg.add(ImageNode);
