@@ -60,13 +60,20 @@ module.exports = class GaschAPI {
        * @alias GaschAPI#httpVerb
        * @param {String} url - The endpoint to call
        * @param {Object} [body] - An object to send
-       * @returns Promise
+       * @returns {Promise}
        */
       self[verb] = function(url, body) {
         var req = self._makeReq(verb, url, body);
         return self._sendReq(req);
       };
     });
+
+    // Check for previous tokens
+    var tok = window.localStorage.getItem("gasch-token");
+    if(tok) {
+      self.authenticated = true;
+      self.token = tok;
+    }
   }
 
   /**
@@ -74,7 +81,7 @@ module.exports = class GaschAPI {
    *
    * @param {String} user - The username
    * @param {String} pass - The password
-   * @returns Promise
+   * @returns {Promise}
    */
   requestToken(user, pass) {
     var req = this._makeReq("GET", "/token", null, false);
@@ -83,7 +90,8 @@ module.exports = class GaschAPI {
     var self = this;
     return this._sendReq(req).then(function(res) {
       self.authenticated = true;
-      self.token = res.token;
+      self.token = res.body.token;
+      window.localStorage.setItem("gasch-token", res.body.token);
     });
   }
 
@@ -117,18 +125,31 @@ module.exports = class GaschAPI {
    * it.
    *
    * @param {Object} req
-   * @returns An ES6 promise
+   * @returns {Promise}
    */
   _sendReq(req) {
     // Turns the thenable into an actual promise and sends the request
     var p = Promise.resolve(req);
 
     // Add callbacks which update the state of the API client
-    /*p.then(function(result) {
-
-    }).catch(function(err) {
-
-    });*/
+    p.catch(function(err) {
+      console.error(err);
+      if(err.response) {
+        // The server is responding.
+        err = err.response.body;
+        if(err.code === 102) {
+          alert(err.message);
+        }
+        else if(err.code >= 100 && err.code < 110)
+          // If authentication error and not wrong credentials
+          alert("Unauthenticated... You must log in. " + err.message);
+        else
+          alert("Unknown error!");
+      } else {
+        // The server is not responding.
+        alert("The server isn't responding!");
+      }
+    });
 
     return p;
   }
