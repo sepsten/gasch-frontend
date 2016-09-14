@@ -6,6 +6,10 @@
   "scripts": {
     "build": "./node_modules/gulp/bin/gulp.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sepsten/gasch-frontend.git"
+  },
   "author": "sepsten",
   "license": "Apache-2.0",
   "devDependencies": {
@@ -17,6 +21,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "co": "^4.6.0",
     "superagent": "^2.1.0"
   }
 }
