@@ -69,22 +69,39 @@ class ImageSurfaceComponent extends Component {
 
       // Handling
       if(e.dataTransfer.files.length === 1) {
-        let file  = e.dataTransfer.files.item(0);
+        let file = e.dataTransfer.files.item(0);
 
         // Check if the file is an image
         if(!file.type.match("image.*"))
           return;
 
-        let reader = new FileReader();
-        reader.onload = function(e) {
-          self.parent.updateState({
-            dataURL: e.target.result
-          });
-          self.setState(ImageSurfaceComponent.ImageState);
-        };
-        reader.readAsDataURL(file);
+        // Upload the file
+        let data = new FormData;
+        data.append("asset", file);
+        self.parent.api.post("/assets", data).then(function(res) {
+          // Update the image node's state with the URL without going through
+          // the history: no need to cancel that... ?
+          self.setImageURL(self.parent.api.prefix + "/assets/" + res.body.id);
+        },
+        function(err) {
+          // We have to find a better way to display notifications!
+          alert("Couldn't upload image...");
+          throw err;
+        });
       }
     };
+  }
+
+  /**
+   * Sets the image node's image URL and switches state.
+   *
+   * @param {String} url
+   */
+  setImageURL(url) {
+    this.parent.updateState({
+      dataURL: url
+    });
+    this.setState(ImageSurfaceComponent.ImageState);
   }
 
   // From Component
@@ -130,7 +147,6 @@ ImageSurfaceComponent.ImageState = {
 
   exit() {
     // ???
-    this.parent.state.dataURL = null;
   }
 };
 

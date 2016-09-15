@@ -8,9 +8,10 @@ var ImageNode = require("./image-node"),
  * Button that creates images nodes.
  *
  * @class
+ * @param {GaschAPI} api - An API client instance
  */
 class ImageButton {
-  constructor() {
+  constructor(api) {
     /**
      * Contains the actual <button> element.
      *
@@ -27,9 +28,16 @@ class ImageButton {
      */
     this.toolbar = null;
 
+    /**
+     * An API client instance.
+     *
+     * @type {GaschAPI}
+     */
+    this.api = api;
+
     var self = this;
     this.dom.addEventListener("click", function() {
-      self.toolbar.editor.execute(ImageButton.clickHandler);
+      self.toolbar.editor.execute(ImageButton.clickHandler, self.api);
     });
   }
 
@@ -52,7 +60,7 @@ class ImageButton {
   }
 }
 
-ImageButton.clickHandler = function(r) {
+ImageButton.clickHandler = function(r, api) {
   var snode = Range.startNode(r), cmd, addP = false;
 
   // If the last node in the surface is selected...
@@ -61,12 +69,15 @@ ImageButton.clickHandler = function(r) {
 
   // If node is a paragraph node, take its contents and put them in the new node.
   if(snode instanceof ParagraphNode) {
-    var nnode = new ImageNode; // Create a new image node
+    var nnode = new ImageNode(api); // Create a new image node
     nnode.innerSurface = new Surface;
     cmd = CF.compose(
-      CF.removeNode(r.surface, r.startNodeIndex), // Remove the paragraph node
-      CF.insertNode(r.surface, nnode, r.startNodeIndex), // Replace it by the image node
-      CF.insertNode(nnode.innerSurface, snode, 0) // Put the paragraph node in the image node
+      // Remove the paragraph node
+      CF.removeNode(r.surface, r.startNodeIndex),
+      // Replace it by the image node
+      CF.insertNode(r.surface, nnode, r.startNodeIndex),
+      // Put the paragraph node in the image node
+      CF.insertNode(nnode.innerSurface, snode, 0)
     );
 
     // Add a trailing paragraph node if necessary
@@ -80,7 +91,7 @@ ImageButton.clickHandler = function(r) {
 
   } else {
     // Insert an image node after the selection's start node 
-    cmd = CF.insertNode(r.surface, new ImageNode, r.startNodeIndex+1);
+    cmd = CF.insertNode(r.surface, new ImageNode(api), r.startNodeIndex+1);
 
     // Add a trailing paragraph node if necessary
     if(addP)
@@ -91,7 +102,6 @@ ImageButton.clickHandler = function(r) {
     else
       return cmd;
   }
-
 };
 
 module.exports = ImageButton;

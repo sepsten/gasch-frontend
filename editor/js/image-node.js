@@ -14,8 +14,10 @@ var IsolatedNode = require("piotr/nodes/isolated-node"),
  * @param {GaschAPI} api - An API client instance
  */
 class ImageNode extends IsolatedNode {
-  constructor() {
+  constructor(api) {
     super();
+
+    this.api = api;
 
     // Image surface
     this.imageSurface = new ImageSurfaceComponent(this);

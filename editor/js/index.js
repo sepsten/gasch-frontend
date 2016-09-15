@@ -6,6 +6,8 @@ var ImageButton = require("./image-button"),
     SaveAgent = require("./save-agent"),
     SaveButton = require("./save-button");
 
+window.api = api;
+
 //// Document retrieval/creation
 var sa;
 
@@ -41,7 +43,7 @@ function createEditor() {
   toolbar.add(new Toolbar.UndoButton);
   toolbar.add(new Toolbar.RedoButton);
   toolbar.add(new Toolbar.HeadingButton);
-  toolbar.add(new ImageButton);
+  toolbar.add(new ImageButton(api));
   toolbar.add(new SaveButton(sa));
 
   editor.selection.set({
