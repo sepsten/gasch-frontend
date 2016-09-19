@@ -80,6 +80,16 @@ ImageButton.clickHandler = function(r, api) {
       CF.insertNode(nnode.innerSurface, snode, 0)
     );
 
+    // Set selection inside the image nodew
+    this.selection.set({
+      caret: r.caret,
+      surface: nnode.innerSurface,
+      startNodeIndex: 0,
+      endNodeIndex: 0,
+      startOffset: r.startOffset,
+      endOffset: r.endOffset
+    });
+
     // Add a trailing paragraph node if necessary
     if(addP)
       return CF.compose(
@@ -91,7 +101,16 @@ ImageButton.clickHandler = function(r, api) {
 
   } else {
     // Insert an image node after the selection's start node 
-    cmd = CF.insertNode(r.surface, new ImageNode(api), r.startNodeIndex+1);
+    var nnode = new ImageNode(api);
+    cmd = CF.insertNode(r.surface, nnode, r.startNodeIndex+1);
+
+    // Update selection
+    this.selection.set({
+      caret: true,
+      surface: nnode.innerSurface,
+      startNodeIndex: 0,
+      startOffset: 0
+    });
 
     // Add a trailing paragraph node if necessary
     if(addP)
