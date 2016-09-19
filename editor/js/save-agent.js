@@ -18,11 +18,13 @@ class SaveAgent {
    * @returns {Promise}
    */
   save(data) {
-    var p;
+    var p, self = this;
 
     // 1. If we have a new document...
     if(!this.id)
-      p = this.api.post("/documents", data);
+      p = this.api.post("/documents", data).then(function(res){
+        self.id = res.body.id;
+      });
     else
       p = this.api.put("/documents/" + this.id, data);
 
