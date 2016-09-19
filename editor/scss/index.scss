@@ -2,23 +2,47 @@
 $fonts: Aileron, "Helvetica Neue", Helvetica, Arial, sans-serif;
 $c0: #421430;
 $c1: #6D3B57;
-$c2: #9F6986;
-$c3: white;
+$c2: #BF7EA1; //#9F6986;
+$c3: #F9CFE5;
+$c4: white;
 
 /** LAYOUT **/
-body {
-  font-family: $fonts;
-  color: $c0;
-  background-color: $c3;
-
-  margin: 0;
-  padding: 0;
+html {
+  height: 100%;
 }
 
-.body {
-  width: 60%;
-  margin: auto;
-  margin-top: 70px;
+body {
+  display: flex;
+  //flex-direction: column;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  font-family: $fonts;
+  color: $c0;
+  background-color: $c4;
+}
+
+.sidebar {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 30%;
+
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.editor {
+  flex-grow: 3;
+  flex-basis: 70%;
+
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  box-sizing: border-box;
+  padding: 20px;
+  padding-left: 40px;
 }
 
 /** CONTAINER **/
@@ -39,28 +63,55 @@ body {
   margin: 20px 0;
 }
 
+.piotr-paragraph {
+  text-align: justify;
+}
+
+.editor > .piotr-node {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.editor > .piotr-isolated-node {
+  width: auto;
+}
+
 .piotr-isolated-node.selected {
-  outline: 3px solid rgba($c0, 0.5);
+  outline: 3px solid rgba($c3, 0.5);
+}
+
+.piotr-heading {
+  border-left: 0.5em solid $c3;
+  padding-left: 0.5em;
+  position: relative;
+  right: 0.5em; // We only correct half because of centering.
 }
 
 /** IMAGE NODE **/
 .piotr-image {
-  @include container(".image-surface", ".piotr-surface");
-  background-color: $c0;
-  color: $c3;
-
-  div {
-    margin: 20px 0;
-  }
+  //@include container(".image-surface", ".piotr-surface");
+  
+  background-color: $c3;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
 
   img {
+    display: block;
     max-width: 100%;
+    margin: auto;
+  }
+
+  .image-surface {
+    margin-bottom: 20px;
   }
 
   > .piotr-surface {
-    background-color: $c3;
+    width: 500px;
+    margin: auto;
     color: $c0;
-    @include container(".piotr-node", ".piotr-node");
+    //@include container(".piotr-node", ".piotr-node");
   }
 }
 
@@ -77,7 +128,7 @@ body {
   text-align: center;
   font-size: 2em;
   margin: auto;
-  color: $c3;
+  color: $c4;
   font-weight: 700;
 }
 
@@ -88,19 +139,13 @@ body {
 
 /** TOOLBAR **/
 .toolbar {
-  padding: 20px;
-  display: flex;
-  height: 30px;
-  width: 100%;
-
-  position: fixed;
-  top: 0;
-  
-  background-color: white;
 }
 
 .toolbar button {
+  display: inline-block;
+  height: 30px;
   margin-right: 10px;
+  margin-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
 }
