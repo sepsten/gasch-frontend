@@ -2,16 +2,18 @@ var ImageNode = require("./image-node"),
     ParagraphNode = require("piotr/nodes/paragraph-node"),
     CF = require("piotr/commands/command-factory"),
     Range = require("piotr/range"),
-    Surface = require("piotr/surface");
+    Surface = require("piotr/surface"),
+    ToolbarComponent = require("piotr/toolbar/toolbar-component");
 
 /**
  * Button that creates images nodes.
  *
  * @class
- * @param {GaschAPI} api - An API client instance
  */
-class ImageButton {
-  constructor(api) {
+class ImageButton extends ToolbarComponent {
+  constructor() {
+    super();
+
     /**
      * Contains the actual <button> element.
      *
@@ -20,24 +22,19 @@ class ImageButton {
     this.dom = document.createElement("button");
     this.dom.textContent = "Cliché";
     this.dom.disabled = true;
+  }
 
-    /**
-     * Reference to the parent toolbar.
-     *
-     * @type {Piotr.Toolbar}
-     */
-    this.toolbar = null;
-
-    /**
-     * An API client instance.
-     *
-     * @type {GaschAPI}
-     */
-    this.api = api;
+  // From ToolbarComponent
+  setParent(toolbar) {
+    super.setParent(toolbar);
 
     var self = this;
+    toolbar.editor.selection.on("update", function() {
+      self.update();
+    })
+
     this.dom.addEventListener("click", function() {
-      self.toolbar.editor.execute(ImageButton.clickHandler, self.api);
+      toolbar.editor.execute(ImageButton.clickHandler);
     });
   }
 

@@ -1,11 +1,15 @@
+var ToolbarComponent = require("piotr/toolbar/toolbar-component");
+
 /**
  * A "save" button for Piotr's default toolbar.
  *
  * @class
  * @param {SaveAgent} sa - A save agent instance
  */
-class SaveButton {
+class SaveButton extends ToolbarComponent {
   constructor(sa) {
+    super();
+
     /**
      * Contains the actual <button> element.
      *
@@ -21,14 +25,16 @@ class SaveButton {
      * @type {Piotr.Toolbar}
      */
     this.toolbar = null;
-
-    var self = this;
-    this.dom.addEventListener("click", function() {
-      sa.save(self.toolbar.editor.document.toJSON());
-    });
   }
 
-  update() {}
+  // From ToolbarComponent
+  setParent(toolbar) {
+    super.setParent(toolbar);
+
+    this.dom.addEventListener("click", function() {
+      sa.save(toolbar.editor.document.toJSON());
+    });
+  }
 }
 
 module.exports = SaveButton;
