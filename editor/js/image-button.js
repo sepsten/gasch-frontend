@@ -57,8 +57,9 @@ class ImageButton extends ToolbarComponent {
   }
 }
 
-ImageButton.clickHandler = function(r, api) {
-  var snode = Range.startNode(r), cmd, addP = false;
+ImageButton.clickHandler = function(r) {
+  var snode = Range.startNode(r), cmd, addP = false,
+      nnode = new ImageNode;
 
   // If the last node in the surface is selected...
   if(r.surface.nodes.length === r.startNodeIndex+1)
@@ -66,7 +67,6 @@ ImageButton.clickHandler = function(r, api) {
 
   // If node is a paragraph node, take its contents and put them in the new node.
   if(snode instanceof ParagraphNode) {
-    var nnode = new ImageNode(api); // Create a new image node
     nnode.innerSurface = new Surface;
     cmd = CF.compose(
       // Remove the paragraph node
@@ -98,7 +98,6 @@ ImageButton.clickHandler = function(r, api) {
 
   } else {
     // Insert an image node after the selection's start node 
-    var nnode = new ImageNode(api);
     cmd = CF.insertNode(r.surface, nnode, r.startNodeIndex+1);
 
     // Update selection
