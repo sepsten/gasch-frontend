@@ -4,7 +4,8 @@ var ImageButton = require("./image-button"),
     Toolbar = require("piotr/toolbar"),
     api = require("./../../common/js/client"),
     SaveAgent = require("./save-agent"),
-    SaveButton = require("./save-button");
+    SaveButton = require("./save-button"),
+    TOC = require("./toc");
 
 window.api = api;
 
@@ -16,7 +17,7 @@ if(window.location.search.length > 0) {
   var id = window.location.search.slice(1); // Remove first "?"
   api.get("/documents/"+id).then(function(res) {
     window.doc = Document.fromJSON(res.body);
-    window.sa = new SaveAgent(api, res.body.id);
+    window.sa = new SaveAgent(res.body.id);
     createEditor();
   }, function(err) {
     if(err.name === "DocumentNotFound") {
@@ -45,6 +46,9 @@ function createEditor() {
   toolbar.add(new Toolbar.HeadingButton);
   toolbar.add(new ImageButton(api));
   toolbar.add(new SaveButton(sa));
+
+  var toc = new TOC(doc);
+  toc.mount(document.getElementById("toc"));
 
   editor.selection.set({
     caret: true,
