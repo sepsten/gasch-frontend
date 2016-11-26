@@ -23,6 +23,13 @@ class ImageSurfaceComponent extends Component {
      */
     this.parent = parent;
 
+    /**
+     * The URL of the image. If no image has been set yet, null.
+     *
+     * @type {String|null}
+     */
+    this.dataURL = null;
+
     var self = this;
 
     /**
@@ -33,7 +40,6 @@ class ImageSurfaceComponent extends Component {
     this.dragEnterHandler = function(e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log("drag enter");
       self.dom.classList.add("drag-over");
     };
 
@@ -56,6 +62,7 @@ class ImageSurfaceComponent extends Component {
     this.dragOverHandler = function(e) {
       e.preventDefault();
       e.stopPropagation();
+      self.dom.classList.add("drag-over");
     };
 
     /**
@@ -98,9 +105,7 @@ class ImageSurfaceComponent extends Component {
    * @param {String} url
    */
   setImageURL(url) {
-    this.parent.updateState({
-      dataURL: url
-    });
+    this.dataURL = url;
     this.setState(ImageSurfaceComponent.ImageState);
   }
 
@@ -141,12 +146,12 @@ ImageSurfaceComponent.DragState = {
 ImageSurfaceComponent.ImageState = {
   enter() {
     var img = new Image;
-    img.src = this.parent.state.dataURL;
+    img.src = this.dataURL;
     this.dom.appendChild(img);
   },
 
   exit() {
-    // ???
+    // Nothing to do.
   }
 };
 
