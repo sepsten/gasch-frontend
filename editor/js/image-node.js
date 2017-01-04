@@ -53,7 +53,7 @@ class ImageNode extends IsolatedNode {
   getInitialState() {
     return {
       // We don't really have any state that is specific to the node and not
-      // to its children.     
+      // to its children.
     };
   }
 
@@ -62,11 +62,14 @@ class ImageNode extends IsolatedNode {
     var dom = document.createElement("div");
 
     // Child image surfaces
+    var imgs = document.createElement("div");
+    imgs.className = "piotr-image__images";
     for(var i = 0; i < this.imgSurfaces.length; i++) {
       let is = this.imgSurfaces[i].createDOMRoot();
-      dom.appendChild(is);
+      imgs.appendChild(is);
       this.imgSurfaces[i].mount(is);
     }
+    dom.appendChild(imgs);
 
     // Toolbar
     var bar = document.createElement("div");
@@ -153,7 +156,7 @@ class ImageNode extends IsolatedNode {
     var i = this.imgSurfaces.length;
     this.imgSurfaces[i] = new ImageSurfaceComponent(this);
     var is = this.imgSurfaces[i].createDOMRoot();
-    this.dom.insertBefore(is, this.innerSurface.dom);
+    this.dom.children[0].appendChild(is);
     this.imgSurfaces[i].mount(is); // Insert in the DOM
   }
 };
