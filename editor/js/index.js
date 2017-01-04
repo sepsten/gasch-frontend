@@ -28,7 +28,7 @@ if(window.location.search.length > 0) {
 } else {
   console.warn("Creating a new document.");
   window.doc = new Document(true);
-  window.sa = new SaveAgent(api);
+  window.sa = new SaveAgent();
   createEditor();
 }
 
