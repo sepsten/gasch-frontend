@@ -5,8 +5,9 @@ window.api = api;
 var loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
-  var data = new FormData(loginForm);
-  api.requestToken(data.get("user"), data.get("pass")).then(function() {
+  let user = loginForm.elements["user"].value,
+      pass = loginForm.elements["pass"].value;
+  api.requestToken(user, pass).then(function() {
     alert("Logged in!");
     renderDocumentList();
   });
