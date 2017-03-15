@@ -2,7 +2,9 @@ var gulp = require("gulp"),
     browserify = require("browserify"),
     reactify = require("reactify"),
     source = require("vinyl-source-stream"),
+    buffer = require("vinyl-buffer"),
     sass = require("gulp-sass"),
+    sourcemaps = require("gulp-sourcemaps"),
     rename = require("gulp-rename");
 
 // Tasks for each Gasch component
@@ -22,6 +24,9 @@ components.map(function(component) {
     })
       .bundle()
       .pipe(source(component+".js"))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write())
       .pipe(gulp.dest("./public/js/"));
   });
 
