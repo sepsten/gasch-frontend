@@ -97,6 +97,24 @@ class ImageSurfaceComponent extends Component {
         });
       }
     };
+
+    /**
+     * Listener for the `click` event on the remove button.
+     */
+    this.removeHandler = function() {
+      // Remove from DOM
+      self.parent.removeImageSurface(self);
+
+      if(self.state === ImageSurfaceComponent.ImageState) {
+        // Get asset ID (retrieve the last part of the URL)
+        var assetID = self.dataURL.split("/").pop();
+        // Remove asset from server
+        self.parent.api.delete("/assets/" + assetID).catch(function(err) {
+          alert("Couldn't remove image from server.");
+          throw err;
+        });
+      }
+    };
   }
 
   /**
@@ -125,10 +143,18 @@ ImageSurfaceComponent.DragState = {
     p.textContent = "Drop an image here!";
     this.dom.appendChild(p);
 
+    // Remove button
+    var rb = document.createElement("button");
+    rb.textContent = "Remove";
+    rb.classList.add("image-surface__remove");
+    this.dom.appendChild(rb);
+
     this.dom.addEventListener("dragenter", this.dragEnterHandler);
     this.dom.addEventListener("dragleave", this.dragLeaveHandler);
     this.dom.addEventListener("dragover", this.dragOverHandler);
     this.dom.addEventListener("drop", this.dropHandler);
+
+    rb.addEventListener("click", this.removeHandler);
   },
 
   exit() {
@@ -148,10 +174,17 @@ ImageSurfaceComponent.ImageState = {
     var img = new Image;
     img.src = this.dataURL;
     this.dom.appendChild(img);
+
+    // Remove button
+    var rb = document.createElement("button");
+    rb.textContent = "Remove";
+    rb.classList.add("image-surface__remove");
+    this.dom.appendChild(rb);
+    rb.addEventListener("click", this.removeHandler);
   },
 
   exit() {
-    // Nothing to do.
+    this.clearDOM();
   }
 };
 

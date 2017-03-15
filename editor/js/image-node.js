@@ -151,6 +151,7 @@ class ImageNode extends IsolatedNode {
   /**
    * Adds an image surface to the node. The node must be mounted. Used as a
    * handler for the "Add picture" button.
+   * It simply instantiates the component and mounts it.
    */
   addImageSurface() {
     var i = this.imgSurfaces.length;
@@ -158,6 +159,23 @@ class ImageNode extends IsolatedNode {
     var is = this.imgSurfaces[i].createDOMRoot();
     this.dom.children[0].appendChild(is);
     this.imgSurfaces[i].mount(is); // Insert in the DOM
+  }
+
+  /**
+   * Deletes an image surface. The node must be mounted. Used as a handler for
+   * the "Remove" buttons.
+   * It removes the component from the DOM and unmounts it.
+   */
+  removeImageSurface(is) {
+    // Look for the ID.
+    for(var i = 0; this.imgSurfaces[i] !== is; i++) {
+      // Exit the function if nothing is found.
+      if(i > this.imgSurfaces.length) return;
+    }
+
+    this.dom.children[0].removeChild(is.dom);
+    is.unmount();
+    this.imgSurfaces.splice(i, 1); // Remove the image surface from the array.
   }
 };
 
